@@ -11,7 +11,21 @@ const Stat = (props) => (
     {props.statName} {props.statValue}
   </p>
 );
+
+const Statistics = (props) => {
+  return (
+    <>
+      <Stat statName="good" statValue={props.good} />
+      <Stat statName="neutral" statValue={props.neutral} />
+      <Stat statName="bad" statValue={props.bad} />
+      <Stat statName="all" statValue={props.all} />
+      <Stat statName="average" statValue={props.average} />
+      <Stat statName="positive" statValue={`${props.positive} %`} />
+    </>
+  );
+};
 const App = () => {
+  // Application State
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
@@ -19,6 +33,7 @@ const App = () => {
   const [average, setAverage] = useState(0);
   const [positive, setPositive] = useState(0);
 
+  // Helper Functions
   const calculateAverage = (good, neutral, bad) => {
     return (good - bad) / (good + neutral + bad);
   };
@@ -27,6 +42,7 @@ const App = () => {
     return (good / (good + bad + neutral)) * 100;
   };
 
+  // Event Handlers
   const handleGoodClick = () => {
     const updatedGood = good + 1;
     setGood(updatedGood);
@@ -50,6 +66,7 @@ const App = () => {
     setAverage(calculateAverage(good, neutral, updatedBad));
     setPositive(calculatePositive(good, neutral, updatedBad));
   };
+
   return (
     <div>
       <Heading text="give feedback" />
@@ -57,12 +74,14 @@ const App = () => {
       <Button text="neutral" handleClick={handleNeutralClick} />
       <Button text="bad" handleClick={handleBadClick} />
       <Heading text="statistics" />
-      <Stat statName="good" statValue={good} />
-      <Stat statName="neutral" statValue={neutral} />
-      <Stat statName="bad" statValue={bad} />
-      <Stat statName="all" statValue={all} />
-      <Stat statName="average" statValue={average} />
-      <Stat statName="positive" statValue={`${positive} %`} />
+      <Statistics
+        good={good}
+        neutral={neutral}
+        bad={bad}
+        all={all}
+        average={average}
+        positive={positive}
+      />
     </div>
   );
 };
