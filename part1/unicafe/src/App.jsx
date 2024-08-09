@@ -13,6 +13,9 @@ const Stat = (props) => (
 );
 
 const Statistics = (props) => {
+  if (!props.good && !props.neutral && !props.bad) {
+    return <div>No feedback given</div>;
+  }
   return (
     <>
       <Stat statName="good" statValue={props.good} />
