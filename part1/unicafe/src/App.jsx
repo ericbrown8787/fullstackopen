@@ -6,9 +6,9 @@ const Button = (props) => (
   <button onClick={props.handleClick}>{props.text}</button>
 );
 
-const Stat = (props) => (
+const StatisticLine = (props) => (
   <p>
-    {props.statName} {props.statValue}
+    {props.text} {props.value}
   </p>
 );
 
@@ -18,12 +18,12 @@ const Statistics = (props) => {
   }
   return (
     <>
-      <Stat statName="good" statValue={props.good} />
-      <Stat statName="neutral" statValue={props.neutral} />
-      <Stat statName="bad" statValue={props.bad} />
-      <Stat statName="all" statValue={props.all} />
-      <Stat statName="average" statValue={props.average} />
-      <Stat statName="positive" statValue={`${props.positive} %`} />
+      <StatisticLine text="good" value={props.good} />
+      <StatisticLine text="neutral" value={props.neutral} />
+      <StatisticLine text="bad" value={props.bad} />
+      <StatisticLine text="all" value={props.all} />
+      <StatisticLine text="average" value={props.average} />
+      <StatisticLine text="positive" value={`${props.positive} %`} />
     </>
   );
 };
