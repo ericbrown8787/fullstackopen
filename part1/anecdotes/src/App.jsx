@@ -4,7 +4,10 @@ const Button = (props) => (
   <button onClick={props.handleClick}>{props.text}</button>
 );
 
+const Heading = (props) => <h2>{props.text}</h2>;
+
 const App = () => {
+  // Static Data
   const anecdotes = [
     "If it hurts, do it more often.",
     "Adding manpower to a late software project makes it later!",
@@ -16,25 +19,38 @@ const App = () => {
     "The only way to go fast, is to go well.",
   ];
 
+  // State
   const [selected, setSelected] = useState(0);
-  const [points, setPoints] = useState(anecdotes.map((item) => 0));
+  const [points, setPoints] = useState(anecdotes.map(() => 0));
+  const [mostPopularAnecdote, setMostPopularAnecdote] = useState(0);
 
+  // Helper Functions
+  const randomIndex = (array) => Math.floor(Math.random() * array.length);
+
+  // Click handlers
   const handleNextAnecdoteClick = () => {
-    const randomIndex = Math.floor(Math.random() * anecdotes.length);
-    setSelected(randomIndex);
+    setSelected(randomIndex(anecdotes));
   };
 
   const handleVoteClick = () => {
     const copy = [...points];
     copy[selected] += 1;
+    const newHighestPoints = Math.max(...copy);
+    const newMostPopularAnecdote = copy.indexOf(newHighestPoints);
     setPoints(copy);
+    setMostPopularAnecdote(newMostPopularAnecdote);
   };
+
   return (
     <>
+      <Heading text="Anecdote of the day" />
       <div>{anecdotes[selected]}</div>
       <div>has {points[selected]} votes</div>
       <Button handleClick={handleVoteClick} text={"vote"} />
       <Button handleClick={handleNextAnecdoteClick} text={"next anecdote"} />
+      <Heading text="Anecdote with the most votes" />
+      <div>{anecdotes[mostPopularAnecdote]}</div>
+      <div>has {points[mostPopularAnecdote]} votes</div>
     </>
   );
 };
