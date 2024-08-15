@@ -1,5 +1,49 @@
 import { useState } from "react";
 
+const Filter = ({ filter, handleFilterChange }) => {
+  return (
+    <div>
+      filter shown with <input value={filter} onChange={handleFilterChange} />
+    </div>
+  );
+};
+
+const PersonForm = ({
+  newName,
+  newNumber,
+  handleNewNameChange,
+  handleNewNumberChange,
+  addPerson,
+}) => {
+  return (
+    <form>
+      <div>
+        name: <input required value={newName} onChange={handleNewNameChange} />
+      </div>
+      <div>
+        number:{" "}
+        <input required value={newNumber} onChange={handleNewNumberChange} />
+      </div>
+      <div>
+        <button type="submit" onClick={addPerson}>
+          add
+        </button>
+      </div>
+    </form>
+  );
+};
+
+const Persons = ({ persons }) => {
+  return (
+    <>
+      {persons.map((person) => (
+        <p key={person.id}>
+          {person.name} {person.number}
+        </p>
+      ))}
+    </>
+  );
+};
 const App = () => {
   const [persons, setPersons] = useState([
     { name: "Arto Hellas", number: "040-123456", id: 1 },
@@ -30,6 +74,7 @@ const App = () => {
       const personObject = {
         name: newName,
         number: newNumber,
+        id: persons[persons.length - 1].id + 1,
       };
       setPersons(persons.concat(personObject));
       setNewName("");
@@ -43,31 +88,17 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      filter shown with <input value={filter} onChange={handleFilterChange} />
-      <h2>Add a New</h2>
-      <form>
-        <div>
-          name:{" "}
-          <input required value={newName} onChange={handleNewNameChange} />
-        </div>
-        <div>
-          number:{" "}
-          <input required value={newNumber} onChange={handleNewNumberChange} />
-        </div>
-        <div>
-          <button type="submit" onClick={addPerson}>
-            add
-          </button>
-        </div>
-      </form>
+      <Filter filter={filter} handleFilterChange={handleFilterChange} />
+      <h2>Add a new</h2>
+      <PersonForm
+        newName={newName}
+        newNumber={newNumber}
+        handleNewNameChange={handleNewNameChange}
+        handleNewNumberChange={handleNewNumberChange}
+        addPerson={addPerson}
+      />
       <h2>Numbers</h2>
-      <>
-        {personsToShow.map((person) => (
-          <p key={person.id}>
-            {person.name} {person.number}
-          </p>
-        ))}
-      </>
+      <Persons persons={personsToShow} />
     </div>
   );
 };
