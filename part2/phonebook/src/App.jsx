@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import personsService from "./services/persons";
 import axios from "axios";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
@@ -10,16 +11,11 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
 
-  const hook = () => {
-    console.log("effect");
-    axios.get("http://localhost:3001/persons").then((response) => {
-      console.log("promise fulfilled");
-      setPersons(response.data);
-    });
-  };
-
-  useEffect(hook, []);
-  console.log("render", persons.length, "persons");
+  useEffect(() => {
+    personsService
+      .getAll()
+      .then((initialPersons) => setPersons(initialPersons));
+  }, []);
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
   };
@@ -41,14 +37,11 @@ const App = () => {
         number: newNumber,
       };
 
-      axios
-        .post("http://localhost:3001/persons", personObject)
-        .then((response) => {
-          setPersons(persons.concat(response.data));
-        });
-
-      setNewName("");
-      setNewNumber("");
+      personsService.create(personObject).then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName("");
+        setNewNumber("");
+      });
     }
   };
 
