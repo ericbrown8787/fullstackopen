@@ -4,12 +4,21 @@ import axios from "axios";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
-
+import Notification from "./components/Notification";
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [message, setMessage] = useState(null);
+  const [messageStyle, setMessageStyle] = useState({
+    background: "lightgrey",
+    fontSize: 20,
+    borderStyle: "solid",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  });
 
   useEffect(() => {
     personsService
@@ -41,6 +50,11 @@ const App = () => {
         };
         const updateId = persons.find((p) => p.name === newName).id;
         personsService.update(updateId, personObject).then((returnedPerson) => {
+          setMessageStyle({ ...messageStyle, color: "green" });
+          setMessage(`Changed ${newName}'s phone number to ${newNumber}`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
           setPersons(
             persons.map((p) => (p.id !== updateId ? p : returnedPerson))
           );
@@ -53,6 +67,11 @@ const App = () => {
       };
 
       personsService.create(personObject).then((returnedPerson) => {
+        setMessageStyle({ ...messageStyle, color: "green" });
+        setMessage(`Added ${newName}`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
         setPersons(persons.concat(returnedPerson));
         setNewName("");
         setNewNumber("");
@@ -63,6 +82,11 @@ const App = () => {
   const deletePerson = (name, id) => {
     if (window.confirm(`Delete ${name}?`)) {
       personsService.remove(id).then((deletedPerson) => {
+        setMessageStyle({ ...messageStyle, color: "green" });
+        setMessage(`Deleted ${name}`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
         setPersons(persons.filter((p) => p.id !== deletedPerson.id));
       });
     }
@@ -74,6 +98,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={message} messageStyle={messageStyle} />
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <h2>Add a new</h2>
       <PersonForm
