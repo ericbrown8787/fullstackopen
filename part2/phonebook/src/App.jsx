@@ -81,14 +81,26 @@ const App = () => {
 
   const deletePerson = (name, id) => {
     if (window.confirm(`Delete ${name}?`)) {
-      personsService.remove(id).then((deletedPerson) => {
-        setMessageStyle({ ...messageStyle, color: "green" });
-        setMessage(`Deleted ${name}`);
-        setTimeout(() => {
-          setMessage(null);
-        }, 5000);
-        setPersons(persons.filter((p) => p.id !== deletedPerson.id));
-      });
+      personsService
+        .remove(id)
+        .then((deletedPerson) => {
+          setMessageStyle({ ...messageStyle, color: "green" });
+          setMessage(`Deleted ${name}`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+          setPersons(persons.filter((p) => p.id !== deletedPerson.id));
+        })
+        .catch((error) => {
+          setMessageStyle({ ...messageStyle, color: "#FF0000" });
+          setMessage(
+            `Information for ${name} has already been removed from server`
+          );
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+          setPersons(persons.filter((p) => p.id !== id));
+        });
     }
   };
 
