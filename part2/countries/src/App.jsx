@@ -18,6 +18,9 @@ function App() {
     setFilter(event.target.value);
   };
 
+  const handleShowSingleCountry = (name) => {
+    setFilter(name);
+  };
   const countriesToShow = countries.filter((country) =>
     country.name.common.toLowerCase().includes(filter.toLowerCase())
   );
@@ -30,7 +33,10 @@ function App() {
         ) : countriesToShow.length === 1 ? (
           <CountryInfo country={countriesToShow[0]} />
         ) : countriesToShow.length <= 10 ? (
-          <Countries countries={countriesToShow} />
+          <Countries
+            countries={countriesToShow}
+            handler={handleShowSingleCountry}
+          />
         ) : (
           "Too many matches, specify another filter"
         )}
