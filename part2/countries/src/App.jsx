@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import countriesService from "./services/countries";
+import weatherService from "./services/weather";
 import Filter from "./components/Filter";
 import CountryInfo from "./components/CountryInfo";
 import Countries from "./components/Countries";
@@ -21,9 +22,11 @@ function App() {
   const handleShowSingleCountry = (name) => {
     setFilter(name);
   };
+
   const countriesToShow = countries.filter((country) =>
     country.name.common.toLowerCase().includes(filter.toLowerCase())
   );
+
   return (
     <div>
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
