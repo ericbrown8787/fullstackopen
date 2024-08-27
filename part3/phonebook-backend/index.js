@@ -2,8 +2,29 @@ const express = require("express");
 const morgan = require("morgan");
 
 const app = express();
+
+// Define custom Morgan format and token for POST request body
+morgan.token("body", function (req, res) {
+  return JSON.stringify(req.body);
+});
+
+const morganFormat = function (tokens, req, res) {
+  const format = [
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.status(req, res),
+    tokens.res(req, res, "content-length"),
+    "-",
+    tokens["response-time"](req, res),
+    "ms",
+  ];
+  if (req.method === "POST") format.push(tokens["body"](req, res));
+  return format.join(" ");
+};
+
+// Use middleware
 app.use(express.json());
-app.use(morgan("tiny"));
+app.use(morgan(morganFormat));
 
 let persons = [
   {
